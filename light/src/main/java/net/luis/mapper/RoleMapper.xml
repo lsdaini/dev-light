@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.luis.mapper.RoleMapper" >
+  <resultMap id="BaseResultMap" type="net.luis.entity.Role" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_role
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="net.luis.entity.Role" useGeneratedKeys="true" keyProperty="id">
+    insert into t_role (id, name, description
+      )
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="net.luis.entity.Role" >
+    update t_role
+    set name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, name, description
+    from t_role
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, name, description
+    from t_role
+  </select>
+  <select id="selectByParam" resultMap="BaseResultMap" parameterType="map">
+    select id, name, description
+    from t_role
+    where 1=1
+    <if test="param.name != null and param.name != ''" >
+        and name like CONCAT('%',#{param.name,jdbcType=VARCHAR},'%')
+    </if>
+    order by id desc
+    limit #{param.start,jdbcType=INTEGER},#{param.length,jdbcType=INTEGER}
+  </select>
+  <select id="selectCountByParam" resultType="java.lang.Integer" parameterType="map">
+    select count(*)
+    from t_role 
+    where 1=1
+    <if test="param.name != null and param.name != ''" >
+        and name like CONCAT('%',#{param.name,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+  <select id="selectByName" resultMap="BaseResultMap">
+    select id, name, description
+    from t_role
+    where name = #{name,jdbcType=VARCHAR}
+    <if test="id != null">
+    	and id <![CDATA[<>]]> #{id,jdbcType=BIGINT}
+    </if>
+  </select>
+</mapper>

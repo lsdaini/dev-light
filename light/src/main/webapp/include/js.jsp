@@ -1,0 +1,11 @@
+<script type="text/javascript" src="${pageContext.request.contextPath}/javascript/jquery/jquery1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="${pageContext.request.contextPath}/javascript/layer2.1/layer.js"></script> 
+<script type="text/javascript" src="${pageContext.request.contextPath}/javascript/laypage1.2/laypage.js"></script> 
+<script type="text/javascript" src="${pageContext.request.contextPath}/javascript/My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="${pageContext.request.contextPath}/javascript/icheck/jquery.icheck.min.js"></script> 
+<script type="text/javascript" src="${pageContext.request.contextPath}/javascript/jquery/validation1.14.0/jquery.validate.min.js"></script> 
+<script type="text/javascript" src="${pageContext.request.contextPath}/javascript/jquery/validation1.14.0/validate-methods.js"></script> 
+<script type="text/javascript" src="${pageContext.request.contextPath}/javascript/jquery/validation1.14.0/messages_zh.min.js"></script> 
+<script type="text/javascript" src="${pageContext.request.contextPath}/javascript/datatables1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="${pageContext.request.contextPath}/javascript/h-ui/H-ui.js"></script> 
+<script type="text/javascript" src="${pageContext.request.contextPath}/javascript/h-ui/H-ui.admin.js"></script>

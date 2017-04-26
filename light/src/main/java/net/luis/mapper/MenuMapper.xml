@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="net.luis.mapper.MenuMapper" >
+  <resultMap id="BaseResultMap" type="net.luis.entity.Menu" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parentId" property="parentid" jdbcType="BIGINT" />
+    <result column="enable" property="enable" jdbcType="INTEGER" />
+    <result column="link" property="link" jdbcType="VARCHAR" />
+    <result column="displayorder" property="displayorder" jdbcType="INTEGER" />
+    <result column="parentName" property="parentName" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_menu
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="net.luis.entity.Menu" >
+    insert into t_menu 
+      <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="parentid != null" >
+        parentId,
+      </if>
+      <if test="enable != null" >
+        enable,
+      </if>
+      <if test="link != null" >
+        link,
+      </if>
+      <if test="displayorder != null" >
+        displayorder,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null" >
+        #{parentid,jdbcType=BIGINT},
+      </if>
+      <if test="enable != null" >
+        #{enable,jdbcType=INTEGER},
+      </if>
+      <if test="link != null" >
+        #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="displayorder != null" >
+        #{displayorder,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="net.luis.entity.Menu" >
+    update t_menu
+    set 
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentid != null" >
+        parentId = #{parentid,jdbcType=BIGINT},
+      </if>
+      <if test="enable != null" >
+        enable = #{enable,jdbcType=INTEGER},
+      </if>
+      <if test="link != null" >
+        link = #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="displayorder != null" >
+        displayorder = #{displayorder,jdbcType=INTEGER}
+      </if>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, name, parentId, enable, link, displayorder
+    from t_menu
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, name, parentId, enable, link, displayorder
+    from t_menu
+  </select>
+  <select id="selectTopMenu" resultMap="BaseResultMap" >
+    select id, name
+    from t_menu
+    where parentId = 0
+  </select>
+  <select id="selectByParam" resultMap="BaseResultMap" parameterType="map">
+    select t.id, t.name, tm.name as parentName, t.enable, t.link, t.displayorder
+    from t_menu t
+    left join t_menu tm on t.parentId = tm.id
+    where 1=1
+    <if test="param.name != null and param.name != ''" >
+        and t.name like CONCAT('%',#{param.name,jdbcType=VARCHAR},'%')
+    </if>
+    order by id desc
+    limit #{param.start,jdbcType=INTEGER},#{param.length,jdbcType=INTEGER}
+  </select>
+  <select id="selectCountByParam" resultType="java.lang.Integer" parameterType="map">
+    select count(*)
+    from t_menu 
+    where 1=1
+    <if test="param.name != null and param.name != ''" >
+        and name like CONCAT('%',#{param.name,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+  <select id="selectChildCount" resultType="java.lang.Integer" parameterType="java.lang.Long">
+    select count(*)
+    from t_menu
+    where parentId = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByName" resultMap="BaseResultMap">
+    select id, name, parentId, enable, link, displayorder
+    from t_menu
+    where name = #{name,jdbcType=VARCHAR}
+    <if test="id != null">
+    	and id <![CDATA[<>]]> #{id,jdbcType=BIGINT}
+    </if>
+  </select>
+  <select id="selectByParentId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select id, name, parentId, enable, link, displayorder
+    from t_menu
+    where parentId = #{parentId,jdbcType=BIGINT}
+  </select>
+  <select id="selectTopByAdminId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select tm.id as id, tm.name as name
+    from t_menu tm
+    left join t_role_menu trm on tm.id = trm.menuId
+    left join t_admin ta on trm.roleId = ta.roleId
+    where ta.id = #{adminId,jdbcType=BIGINT} and tm.enable = 1 and ta.enable = 1 and tm.parentId = 0
+    order by tm.displayOrder desc
+  </select>
+  <select id="selectByParentIdAndAdminId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select tm.id as id, tm.name as name, tm.link as link
+    from t_menu tm
+    left join t_role_menu trm on tm.id = trm.menuId
+    left join t_admin ta on trm.roleId = ta.roleId
+    where ta.id = #{adminId,jdbcType=BIGINT} and tm.enable = 1 and ta.enable = 1 and tm.parentId = #{parentId,jdbcType=BIGINT}
+    order by tm.displayOrder desc
+  </select>
+</mapper>
